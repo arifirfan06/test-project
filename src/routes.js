@@ -37,12 +37,13 @@ Coded by www.creative-tim.com
 
 // Material Dashboard 2 React layouts
 import Dashboard from "layouts/dashboard";
-import Tables from "layouts/tables";
-import Billing from "layouts/billing";
+import Galeri from "layouts/galeri";
+import Layanan from "layouts/layanan";
 // import RTL from "layouts/rtl";
-import Notifications from "layouts/notifications";
-import Profile from "layouts/profile";
+import Produk from "layouts/produk";
+import Profile from "layouts/klien";
 import SignIn from "layouts/authentication/sign-in";
+import Blog from "layouts/blog";
 // import SignUp from "layouts/authentication/sign-up";
 
 // @mui icons
@@ -60,18 +61,18 @@ const routes = [
   {
     type: "collapse",
     name: "Galeri",
-    key: "tables",
+    key: "galeri",
     icon: <Icon fontSize="small">table_view</Icon>,
     route: "/galeri",
-    component: <Tables />,
+    component: <Galeri />,
   },
   {
     type: "collapse",
     name: "Layanan",
-    key: "billing",
+    key: "layanan",
     icon: <Icon fontSize="small">receipt_long</Icon>,
     route: "/layanan",
-    component: <Billing />,
+    component: <Layanan />,
   },
   // {
   //   type: "collapse",
@@ -84,15 +85,15 @@ const routes = [
   {
     type: "collapse",
     name: "Produk",
-    key: "notifications",
+    key: "produk",
     icon: <Icon fontSize="small">notifications</Icon>,
     route: "/produk",
-    component: <Notifications />,
+    component: <Produk />,
   },
   {
     type: "collapse",
     name: "Klien",
-    key: "profile",
+    key: "klien",
     icon: <Icon fontSize="small">person</Icon>,
     route: "/klien",
     component: <Profile />,
@@ -100,10 +101,10 @@ const routes = [
   {
     type: "collapse",
     name: "Blog",
-    key: "???",
+    key: "blog",
     icon: <Icon fontSize="small">assignment</Icon>,
     route: "/blog",
-    component: <Notifications />,
+    component: <Blog />,
   },
   {
     type: "collapse",
