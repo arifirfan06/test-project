@@ -75,8 +75,8 @@ function Tables() {
                   Input Klien
                 </MDTypography>
               </MDBox>
-              <MDBox pt={3}>
-                <Stack direction="row" alignItems="center" flexDirection="column" mb="20px">
+              <MDBox pt={3} mx={2}>
+                <Stack direction="row" alignItems="" flexDirection="column" mb="20px">
                   <MDTypography variant="h6" fontWeight="medium" margin="12px">
                     Unggah logo perusahaan :
                   </MDTypography>
@@ -84,6 +84,7 @@ function Tables() {
                     variant="contained"
                     component="label"
                     color="dark"
+                    sx={{ width: '150px' }}
                     startIcon={<PhotoCamera />}
                   >
                     Upload
@@ -101,7 +102,7 @@ function Tables() {
                     Project type :
                   </MDTypography>
 
-                  <FormControl sx={{ m: 1, minWidth: 160, height: "40px", width: "200px" }}>
+                  <FormControl sx={{ m: 1, mx:0, my:0, minWidth: 160, height: "40px", width: '200px' }}>
                     <InputLabel id="demo-simple-select-autowidth-label">Pilih Kategori</InputLabel>
                     <Select
                       labelId="demo-simple-select-autowidth-label"
@@ -129,10 +130,11 @@ function Tables() {
                     multiline
                     rows={6}
                     sx={{
-                      width: 260,
+                      width: 500,
+                      maxWidth: '100%'
                     }}
                   />
-                  <MDButton variant="gradient" color="dark" sx={{ margin: "15px" }}>
+                  <MDButton variant="gradient" color="dark" sx={{ marginTop: "30px", width: '200px', alignItems: 'center'}}>
                     <Icon sx={{ fontWeight: "bold" }}>add</Icon>
                     &nbsp;Tambah Galeri Baru
                   </MDButton>

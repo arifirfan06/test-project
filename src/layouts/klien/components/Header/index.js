@@ -68,7 +68,6 @@ function Header({ children }) {
     <MDBox position="relative" mb={5}>
       <MDBox
         display="flex"
-        alignItems="center"
         position="relative"
         minHeight="18.75rem"
         borderRadius="xl"
@@ -81,6 +80,7 @@ function Header({ children }) {
           backgroundSize: "cover",
           backgroundPosition: "50%",
           overflow: "hidden",
+          alignItems:"center"
         }}
       />
       <Card
@@ -92,7 +92,7 @@ function Header({ children }) {
           px: 2,
         }}
       >
-        <Grid container spacing={3} alignItems="center">
+        <Grid container spacing={3} sx={{alignItems: 'center'}}>
           <Grid item>
             <MDAvatar src={burceMars} alt="profile-image" size="xl" shadow="sm" />
           </Grid>

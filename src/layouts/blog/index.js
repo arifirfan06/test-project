@@ -91,10 +91,11 @@ function Tables() {
                     multiline
                     rows={6}
                     sx={{
-                      width: 260,
+                      width: '500px',
+                      maxWidth: '95%'
                     }}
                   />
-                  <MDButton variant="gradient" color="dark" sx={{ margin: "15px" }}>
+                  <MDButton variant="gradient" color="dark" sx={{ marginTop: "30px" }}>
                     <Icon sx={{ fontWeight: "bold" }}>add</Icon>
                     &nbsp;Tambah Galeri Baru
                   </MDButton>

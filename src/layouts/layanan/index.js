@@ -90,7 +90,8 @@ function Tables() {
                     multiline
                     rows={5}
                     sx={{
-                      width: 300,
+                      width: '400px',
+                      maxWidth: '95%'
                     }}
                   />
 
