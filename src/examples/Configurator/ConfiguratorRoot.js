@@ -54,6 +54,7 @@ export default styled(Drawer)(({ theme, ownerState }) => {
       borderRadius: 0,
       boxShadow: lg,
       overflowY: "auto",
+      maxWidth: "-webkit-fill-available",
       ...(openConfigurator ? drawerOpenStyles() : drawerCloseStyles()),
     },
   };

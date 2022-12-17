@@ -128,7 +128,7 @@ function Notifications() {
         </Grid>
         <MDButton variant="gradient" color="dark" sx={{ marginTop: "25px", width: "45%" }}>
           <Icon sx={{ fontWeight: "bold" }}>add</Icon>
-          &nbsp;Tambah Layanan Baru
+          &nbsp;Tambah Produk Baru
         </MDButton>
       </MDBox>
       {/* <Footer /> */}

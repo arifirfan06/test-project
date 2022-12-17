@@ -97,7 +97,7 @@ function Tables() {
                   />
                   <MDButton variant="gradient" color="dark" sx={{ marginTop: "30px" }}>
                     <Icon sx={{ fontWeight: "bold" }}>add</Icon>
-                    &nbsp;Tambah Galeri Baru
+                    &nbsp;Tambah Artikel Baru
                   </MDButton>
                 </Stack>
               </MDBox>
