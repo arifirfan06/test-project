@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useContext } from "react";
 
 // react-router components
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
@@ -37,6 +37,7 @@ import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "co
 // Images
 import brandWhite from "assets/images/logo-ct.png";
 import brandDark from "assets/images/logo-ct-dark.png";
+import { AuthContext } from "context/Auth";
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -53,6 +54,9 @@ export default function App() {
   const [onMouseEnter, setOnMouseEnter] = useState(false);
   const [rtlCache, setRtlCache] = useState(null);
   const { pathname } = useLocation();
+  const { isLogin } = useContext(AuthContext);
+
+  console.log(isLogin, routes.slice(0, 6))
 
   // Cache for the rtl
   useMemo(() => {
@@ -141,7 +145,7 @@ export default function App() {
               color={sidenavColor}
               brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
               brandName="Admin Dashboard"
-              routes={routes}
+              routes={isLogin ? routes.slice(0, 5) : routes}
               onMouseEnter={handleOnMouseEnter}
               onMouseLeave={handleOnMouseLeave}
             />
@@ -165,7 +169,7 @@ export default function App() {
             color={sidenavColor}
             brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
             brandName="Admin Dashboard"
-            routes={routes}
+            routes={isLogin ? routes.slice(0, 6) : routes}
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}
           />
