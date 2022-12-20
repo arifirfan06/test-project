@@ -93,8 +93,13 @@ function Tables() {
                   <MDTypography variant="h6" fontWeight="medium" margin="12px">
                     Kategori :
                   </MDTypography>
-
-                  <FormControl sx={{ m: 1, minWidth: 160, height: "40px", width: '200px' }}>
+                  <Grid container>
+                  <MDButton variant="contained" color="info" sx={{margin:'5px'}}>Training</MDButton>
+                  <MDButton variant="contained" color="info" sx={{margin:'5px'}}>Vacation</MDButton>
+                  <MDButton variant="contained" color="info" sx={{margin:'5px'}}>Fellowship</MDButton>
+                  <MDButton variant="contained" color="info" sx={{margin:'5px'}}>Lain-lain</MDButton>
+                  </Grid>
+                  {/* <FormControl sx={{ m: 1, minWidth: 160, height: "40px", width: '200px' }}>
                     <InputLabel id="demo-simple-select-autowidth-label">Pilih Kategori</InputLabel>
                     <Select
                       labelId="demo-simple-select-autowidth-label"
@@ -113,7 +118,7 @@ function Tables() {
                       <MenuItem value="Fellowship">Fellowship</MenuItem>
                       <MenuItem value="Lain-lain">Lain-lain</MenuItem>
                     </Select>
-                  </FormControl>
+                  </FormControl> */}
                   <MDButton variant="gradient" color="dark" sx={{ marginTop: "30px", width: '200px', alignItems: 'center'}}>
                     <Icon sx={{ fontWeight: "bold" }}>add</Icon>
                     &nbsp;Tambah Galeri Baru

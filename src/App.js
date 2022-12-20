@@ -145,7 +145,7 @@ export default function App() {
               color={sidenavColor}
               brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
               brandName="Admin Dashboard"
-              routes={isLogin ? routes.slice(0, 5) : routes}
+              routes={isLogin ? routes.slice(0, routes.length - 1) : routes}
               onMouseEnter={handleOnMouseEnter}
               onMouseLeave={handleOnMouseLeave}
             />
@@ -169,7 +169,7 @@ export default function App() {
             color={sidenavColor}
             brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
             brandName="Admin Dashboard"
-            routes={isLogin ? routes.slice(0, 6) : routes}
+            routes={isLogin ? routes.slice(0, routes.length - 1) : routes}
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}
           />

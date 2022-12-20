@@ -84,7 +84,7 @@ function Tables() {
                     variant="contained"
                     component="label"
                     color="dark"
-                    sx={{ width: '150px' }}
+                    sx={{ width: "150px" }}
                     startIcon={<PhotoCamera />}
                   >
                     Upload
@@ -102,7 +102,21 @@ function Tables() {
                     Project type :
                   </MDTypography>
 
-                  <FormControl sx={{ m: 1, mx:0, my:0, minWidth: 160, height: "40px", width: '200px' }}>
+                  <Grid container>
+                    <MDButton variant="contained" color="info" sx={{ margin: "5px" }}>
+                      ERP
+                    </MDButton>
+                    <MDButton variant="contained" color="info" sx={{ margin: "5px" }}>
+                      Application
+                    </MDButton>
+                    <MDButton variant="contained" color="info" sx={{ margin: "5px" }}>
+                      Fellowship
+                    </MDButton>
+                    <MDButton variant="contained" color="info" sx={{ margin: "5px" }}>
+                      Lain-lain
+                    </MDButton>
+                  </Grid>
+                  {/* <FormControl sx={{ m: 1, mx:0, my:0, minWidth: 160, height: "40px", width: '200px' }}>
                     <InputLabel id="demo-simple-select-autowidth-label">Pilih Kategori</InputLabel>
                     <Select
                       labelId="demo-simple-select-autowidth-label"
@@ -121,7 +135,7 @@ function Tables() {
                       <MenuItem value="Fellowship">Travel</MenuItem>
                       <MenuItem value="Lain-lain">Lain-lain</MenuItem>
                     </Select>
-                  </FormControl>
+                  </FormControl> */}
                   <MDTypography variant="h6" fontWeight="medium" margin="12px">
                     Deskripsi :
                   </MDTypography>
@@ -131,10 +145,14 @@ function Tables() {
                     rows={6}
                     sx={{
                       width: 500,
-                      maxWidth: '100%'
+                      maxWidth: "100%",
                     }}
                   />
-                  <MDButton variant="gradient" color="dark" sx={{ marginTop: "30px", width: '200px', alignItems: 'center'}}>
+                  <MDButton
+                    variant="gradient"
+                    color="dark"
+                    sx={{ marginTop: "30px", width: "200px", alignItems: "center" }}
+                  >
                     <Icon sx={{ fontWeight: "bold" }}>add</Icon>
                     &nbsp;Tambah Klien Baru
                   </MDButton>
