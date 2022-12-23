@@ -93,16 +93,16 @@ function Tables() {
                   <MDTypography variant="h6" fontWeight="medium" margin="12px">
                     Project manager :
                   </MDTypography>
-                  <MDInput type="text" label="Nama" sx={{ width: "200px" }} />
+                  <MDInput type="text" label="Nama" sx={{ width: "200px" }} size="small"/>
                   <MDTypography variant="h6" fontWeight="medium" margin="12px">
                     Project date :
                   </MDTypography>
-                  <MDInput type="date" sx={{ width: "200px" }} />
+                  <MDInput type="date" sx={{ width: "200px" }} size="small"/>
                   <MDTypography variant="h6" fontWeight="medium" margin="12px">
                     Project type :
                   </MDTypography>
-
-                  <Grid container>
+                  <MDInput type="text" label="Project Type" sx={{ width: "200px" }} size="small"/>
+                  {/* <Grid container>
                     <MDButton variant="contained" color="info" sx={{ margin: "5px" }}>
                       ERP
                     </MDButton>
@@ -115,7 +115,7 @@ function Tables() {
                     <MDButton variant="contained" color="info" sx={{ margin: "5px" }}>
                       Lain-lain
                     </MDButton>
-                  </Grid>
+                  </Grid> */}
                   {/* <FormControl sx={{ m: 1, mx:0, my:0, minWidth: 160, height: "40px", width: '200px' }}>
                     <InputLabel id="demo-simple-select-autowidth-label">Pilih Kategori</InputLabel>
                     <Select
@@ -147,6 +147,7 @@ function Tables() {
                       width: 500,
                       maxWidth: "100%",
                     }}
+                    size="small"
                   />
                   <MDButton
                     variant="gradient"

@@ -54,9 +54,9 @@ export default function App() {
   const [onMouseEnter, setOnMouseEnter] = useState(false);
   const [rtlCache, setRtlCache] = useState(null);
   const { pathname } = useLocation();
-  const { isLogin } = useContext(AuthContext);
+  let { isLogin } = useContext(AuthContext);
 
-  console.log(isLogin, routes.slice(0, 6))
+  // console.log(isLogin, routes.slice(0, 6))
 
   // Cache for the rtl
   useMemo(() => {
