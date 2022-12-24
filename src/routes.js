@@ -44,6 +44,7 @@ import Produk from "layouts/produk";
 import Profile from "layouts/klien";
 import SignIn from "layouts/authentication/sign-in";
 import Blog from "layouts/blog";
+import Banner from "layouts/banner"
 // import SignUp from "layouts/authentication/sign-up";
 
 // @mui icons
@@ -105,6 +106,14 @@ const routes = [
     icon: <Icon fontSize="small">assignment</Icon>,
     route: "/blog",
     component: <Blog />,
+  },
+  {
+    type: "collapse",
+    name: "Banner",
+    key: "banner",
+    icon: <Icon fontSize="small">notifications</Icon>,
+    route: "/banner",
+    component: <Banner />,
   },
   {
     type: "collapse",
