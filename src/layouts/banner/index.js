@@ -12,7 +12,6 @@ Coded by www.creative-tim.com
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
-import React from "react";
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -34,6 +33,9 @@ import MDInput from "components/MDInput";
 // Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
+import { useContext } from "react";
+import { AuthContext } from "context/Auth";
+import { useNavigate } from "react-router-dom";
 
 // import Footer from "examples/Footer";
 // import DataTable from "examples/Tables/DataTable";
@@ -45,7 +47,9 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 function Banner() {
   // const { columns, rows } = authorsTableData();
   // const { columns: pColumns, rows: pRows } = projectsTableData();
-
+  const { isLogin } = useContext(AuthContext);
+  const navigate = useNavigate()
+  {!isLogin && navigate('/authentication/sign-in')}
   return (
     <DashboardLayout>
       <DashboardNavbar />
