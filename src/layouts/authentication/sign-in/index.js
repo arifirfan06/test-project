@@ -34,17 +34,72 @@ import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
-
+import { useRef, useContext } from "react";
+import axios from "axios";
 // Authentication layout components
 import BasicLayout from "layouts/authentication/components/BasicLayout";
+import { AuthContext } from "context/Auth";
+import { useNavigate } from "react-router-dom";
 
 // Images
 import bgImage from "assets/images/bg-sign-in-basic.jpeg";
 
 function Basic() {
   // const [rememberMe, setRememberMe] = useState(false);
-
+  const inputUser = useRef()
+  const inputPassword = useRef()
+  const navigate = useNavigate()
+  const { isLogin , setIsLogin } = useContext(AuthContext);
   // const handleSetRememberMe = () => setRememberMe(!rememberMe);
+  const loginHandler = async () => {
+    const userName = inputUser.current.value
+    const password = inputPassword.current.value
+
+    try {
+     const {data} = await axios.post('https://7vv6wlcft7.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_login', {
+      username: userName,
+      password_hash: password
+    })
+    console.log(data.data.auth)
+    localStorage.setItem('auth', data.data.auth)
+    setIsLogin(current => !current)
+    console.log(isLogin)
+    navigate("/")
+  } catch (err) {
+    console.log(err)
+  }
+
+  // try {
+  //   const { data } = await axios.post('https://7vv6wlcft7.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_login', {
+  //     body: {
+  //       username: userName,
+  //       password_hash: password,
+        
+  //     },
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     }
+  //   })
+  //   localStorage.setItem('_q', data.auth)
+  //   // toggle(true)
+  //   navigate("/")
+  // } catch (error) {
+  //   // toast.error('login error')
+  //   console.log(error)
+  // }
+
+  // await fetch('https://7vv6wlcft7.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_login', {
+  //   method: 'POST',
+  //   headers: {
+  //     'Content-Type': 'application/json'
+  //   },
+  //   body: JSON.stringify({
+  //     username: userName,
+  //     password_hash: password,
+  //   })
+  // })
+
+  }
 
   return (
     <BasicLayout image={bgImage}>
@@ -61,16 +116,16 @@ function Basic() {
           textAlign="center"
         >
           <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
-            Sign in
+            Sign in to proceed
           </MDTypography>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
             <MDBox mb={2}>
-              <MDInput type="text" label="Username" fullWidth />
+              <MDInput type="text" label="Username" fullWidth inputRef={inputUser}/>
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="password" label="Password" fullWidth />
+              <MDInput type="password" label="Password" fullWidth inputRef={inputPassword}/>
             </MDBox>
             {/* <MDBox display="flex" alignItems="center" ml={-1}>
               <Switch checked={rememberMe} onChange={handleSetRememberMe} />
@@ -85,7 +140,7 @@ function Basic() {
               </MDTypography>
             </MDBox> */}
             <MDBox mt={4} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth>
+              <MDButton variant="gradient" color="info" fullWidth onClick={loginHandler}>
                 sign in
               </MDButton>
             </MDBox>
