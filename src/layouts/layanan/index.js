@@ -13,6 +13,7 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 import React from "react";
+import axios from 'axios'
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -30,11 +31,12 @@ import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import Stack from "@mui/material/Stack";
 import MDButton from "components/MDButton";
 import MDInput from "components/MDInput";
+import DataTable from "examples/Tables/DataTable";
 
 // Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "context/Auth";
 import { useNavigate } from "react-router-dom";
 
@@ -51,6 +53,20 @@ function Tables() {
   const { isLogin } = useContext(AuthContext);
   const navigate = useNavigate()
   {!isLogin && navigate('/authentication/sign-in')}
+  const [isShowed, setView] = useState(false);
+  const [dataLayanan, setData] = useState([]);
+  const dataFetch = async () => {
+    setView((current) => !current);
+    await axios
+      .get(
+        "https://a25muet3l2.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_layanan",
+        {
+          headers: { auth: localStorage.getItem('auth') },
+        }
+      )
+      .then((res) => setData(res.data.data));
+  }
+
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -110,6 +126,38 @@ function Tables() {
           </Grid>
         </Grid>
       </MDBox>
+      <MDBox sx={{textAlign: 'center'}}>
+      <MDButton
+          variant="gradient"
+          color="dark"
+          sx={{ marginTop: "15px", width: "45%"}}
+          onClick={dataFetch}
+        >
+          <Icon>refresh</Icon> 
+          {isShowed ? "Hide Data" : "Show Data"}
+        </MDButton>
+          <Grid mt={6} xs={12} item sx={{maxWidth: '100vw', textAlign: 'center'}}>
+          {isShowed && (
+            <DataTable
+              maxWidth={'100vw'}
+              table={{
+                columns: [
+                  { Header: "Id", accessor: "id", width: "5%" },
+                  { Header: "Layanan", accessor: "icon_layanan", width: "25%" },
+                  { Header: "deskripsi", accessor: "content_layanan", width: "30%" },
+                  { Header: "Gambar", align: "center", accessor: (origRow, rowIndex) => {return (
+                    <MDButton onClick={() => viewHandler(origRow)}>View</MDButton>
+                  )} },
+                  { Header: "action", align: "center", accessor: (origRow, rowIndex) => {return (
+                    <MDButton onClick={() => deleteHandler(origRow)}>Delete</MDButton>
+                  )} },
+                ],
+                rows: dataLayanan,
+              }}
+            />
+          )}
+        </Grid>
+        </MDBox>
       {/* <Footer /> */}
     </DashboardLayout>
   );

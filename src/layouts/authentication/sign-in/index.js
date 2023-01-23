@@ -56,7 +56,7 @@ function Basic() {
     const password = inputPassword.current.value
 
     try {
-     const {data} = await axios.post('https://7vv6wlcft7.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_login', {
+     const {data} = await axios.post('https://a25muet3l2.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_login', {
       username: userName,
       password_hash: password
     })

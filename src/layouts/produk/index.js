@@ -114,9 +114,9 @@ function Notifications() {
     setView((current) => !current);
     await axios
       .get(
-        "https://7vv6wlcft7.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_produk",
+        "https://a25muet3l2.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_produk",
         {
-          headers: { auth: "admin" },
+          headers: { auth: localStorage.getItem('auth') },
         }
       )
       .then((res) => setData(res.data.data));
@@ -128,26 +128,10 @@ function Notifications() {
   const inputJudul = useRef();
   const inputLink = useRef();
   const dataPost = async () => {
-    // console.log(inputJudul.current.value);
-    // console.log(inputLink.current.value);
-    // await axios
-    //   .post(
-    //     "https://7vv6wlcft7.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_produk",
-    //     {
-    //       headers: { auth: "admin", "content-type": "application/json" },
-    //       body: {
-    //         judul_produk: inputJudul.current.value,
-    //         link_produk: inputLink.current.value,
-    //       },
-    //     }
-    //   )
-    //   .then((res) => {
-    //     console.log(res.data);
-    //   });
-       await fetch('https://7vv6wlcft7.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_produk', {
+       await fetch('https://a25muet3l2.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_produk', {
     method: 'POST',
     headers: {
-      auth: 'admin',
+      auth: localStorage.getItem('auth'),
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
@@ -159,8 +143,8 @@ function Notifications() {
   };
   const deleteHandler = async (row) => {
     console.log(row)
-    await axios.delete(`https://7vv6wlcft7.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_produk?id=${row.id}`, {
-      headers: {auth: 'admin'}
+    await axios.delete(`https://a25muet3l2.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_produk?id=${row.id}`, {
+      headers: {auth: localStorage.getItem('auth')}
     }).then((res) => console.log(res))
     // await fetch(`https://7vv6wlcft7.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_produk?id=${row.id}`, {
     //   method: 'DELETE',
@@ -174,9 +158,9 @@ function Notifications() {
     setView((current) => !current);
     await axios
       .get(
-        "https://7vv6wlcft7.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_produk",
+        "https://a25muet3l2.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_produk",
         {
-          headers: { auth: "admin" },
+          headers: { auth: localStorage.getItem('auth') },
         }
       )
       .then((res) => setData(res.data.data));
@@ -229,6 +213,7 @@ function Notifications() {
         <Grid mt={6} xs={12} item sx={{maxWidth: '100vw'}}>
           {isShowed && (
             <DataTable
+              maxWidth={'100vw'}
               table={{
                 columns: [
                   { Header: "Id", accessor: "id", width: "25%" },

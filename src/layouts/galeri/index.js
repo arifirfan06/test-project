@@ -33,6 +33,8 @@ import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import Stack from "@mui/material/Stack";
 import MDButton from "components/MDButton";
 // import MDInput from "components/MDInput";
+import DataTable from "examples/Tables/DataTable";
+import axios from "axios";
 
 // Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
@@ -40,6 +42,7 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import { useContext } from "react";
 import { AuthContext } from "context/Auth";
 import { useNavigate } from "react-router-dom";
+import { textAlign } from "@mui/system";
 
 // import Footer from "examples/Footer";
 // import DataTable from "examples/Tables/DataTable";
@@ -55,9 +58,33 @@ function Tables() {
   const { isLogin } = useContext(AuthContext);
   const navigate = useNavigate()
   {!isLogin && navigate('/authentication/sign-in')}
+
+  const [isShowed, setView] = useState(false);
+  const [dataGaleri, setData] = useState([]);
+
   const handleChange = (event) => {
     setAge(event.target.value);
   };
+
+  const dataPost = async () => {
+
+  }
+
+  const dataFetch = async () => {
+    setView((current) => !current);
+    await axios
+      .get(
+        "https://a25muet3l2.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_galeri",
+        {
+          headers: { auth: localStorage.getItem('auth') },
+        }
+      )
+      .then((res) => setData(res.data.data));
+    
+  }
+  const viewHandler = async () => {
+    
+  }
 
   return (
     <DashboardLayout>
@@ -134,6 +161,38 @@ function Tables() {
           </Grid>
         </Grid>
       </MDBox>
+      <MDBox sx={{textAlign: 'center'}}>
+      <MDButton
+          variant="gradient"
+          color="dark"
+          sx={{ marginTop: "15px", width: "45%"}}
+          onClick={dataFetch}
+        >
+          <Icon>refresh</Icon> 
+          {isShowed ? "Hide Data" : "Show Data"}
+        </MDButton>
+          <Grid mt={6} xs={12} item sx={{maxWidth: '100vw', textAlign: 'center'}}>
+          {isShowed && (
+            <DataTable
+              maxWidth={'100vw'}
+              table={{
+                columns: [
+                  { Header: "Id", accessor: "id", width: "25%" },
+                  { Header: "Kategori", accessor: "kategory", width: "20%" },
+                  { Header: "Link", accessor: "gambar", width: "30%" },
+                  { Header: "Gambar", align: "center", accessor: (origRow, rowIndex) => {return (
+                    <MDButton onClick={() => viewHandler(origRow)}>View</MDButton>
+                  )} },
+                  { Header: "action", align: "center", accessor: (origRow, rowIndex) => {return (
+                    <MDButton onClick={() => deleteHandler(origRow)}>Delete</MDButton>
+                  )} },
+                ],
+                rows: dataGaleri,
+              }}
+            />
+          )}
+        </Grid>
+        </MDBox>
       {/* <Footer /> */}
     </DashboardLayout>
   );
