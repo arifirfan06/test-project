@@ -31,7 +31,7 @@ import MDButton from "components/MDButton";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import DataTable from "examples/Tables/DataTable";
-import { useContext, useState, useRef } from "react";
+import { useContext, useState, useRef, useEffect } from "react";
 import { AuthContext } from "context/Auth";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -102,13 +102,26 @@ function Notifications() {
   //     bgWhite
   //   />
   // );
+
   const { isLogin } = useContext(AuthContext);
   const navigate = useNavigate();
   {
     !isLogin && navigate("/authentication/sign-in");
   }
-  const [isShowed, setView] = useState(false);
+  const [isShowed, setView] = useState(true);
   const [dataProduk, setData] = useState([]);
+  const [viewCreate, setCreate] = useState(false);
+
+  useEffect( async () => {
+    const data = await axios(
+      "https://a25muet3l2.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_produk",
+      {
+        headers: { auth: localStorage.getItem("auth") },
+      }
+    );
+    console.log(data)
+    setData(data.data.data)
+  }, []);
 
   const dataFetch = async () => {
     setView((current) => !current);
@@ -116,7 +129,7 @@ function Notifications() {
       .get(
         "https://a25muet3l2.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_produk",
         {
-          headers: { auth: localStorage.getItem('auth') },
+          headers: { auth: localStorage.getItem("auth") },
         }
       )
       .then((res) => setData(res.data.data));
@@ -128,78 +141,104 @@ function Notifications() {
   const inputJudul = useRef();
   const inputLink = useRef();
   const dataPost = async () => {
-       await fetch('https://a25muet3l2.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_produk', {
-    method: 'POST',
-    headers: {
-      auth: localStorage.getItem('auth'),
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      judul_produk: inputJudul.current.value,
-      link_produk: inputLink.current.value,
-    })
-  })
-  // dataReFetch()
+    await fetch(
+      "https://a25muet3l2.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_produk",
+      {
+        method: "POST",
+        headers: {
+          auth: localStorage.getItem("auth"),
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          judul_produk: inputJudul.current.value,
+          link_produk: inputLink.current.value,
+        }),
+      }
+    );
+    // dataReFetch()
   };
   const deleteHandler = async (row) => {
-    console.log(row)
-    await axios.delete(`https://a25muet3l2.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_produk?id=${row.id}`, {
-      headers: {auth: localStorage.getItem('auth')}
-    }).then((res) => console.log(res))
+    console.log(row);
+    await axios
+      .delete(
+        `https://a25muet3l2.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_produk?id=${row.id}`,
+        {
+          headers: { auth: localStorage.getItem("auth") },
+        }
+      )
+      .then((res) => console.log(res));
     // await fetch(`https://7vv6wlcft7.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_produk?id=${row.id}`, {
     //   method: 'DELETE',
     //   headers: {
     //     auth: 'admin',
     //   },
     // })
-    dataReFetch()
-  }
+    // dataReFetch();
+  };
   const dataReFetch = async () => {
     setView((current) => !current);
     await axios
       .get(
         "https://a25muet3l2.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_produk",
         {
-          headers: { auth: localStorage.getItem('auth') },
+          headers: { auth: localStorage.getItem("auth") },
         }
       )
       .then((res) => setData(res.data.data));
-      setView((current) => !current);
-  }
+    setView((current) => !current);
+  };
   return (
     <DashboardLayout>
       <DashboardNavbar />
       <MDBox mt={6} mb={3} padding={0} sx={{ display: "grid", justifyItems: "center" }}>
-        <Grid container spacing={3} justifyContent="center">
-          <Grid item xs={12} lg={8}>
-            <Card>
-              <MDBox p={2} marginTop="12px" marginBottom="12px">
-                <MDTypography variant="h5" marginBottom="15px">
-                  Judul Produk
-                </MDTypography>
-                <MDInput type="text" label="Judul" sx={{ width: "240px" }} inputRef={inputJudul} />
-              </MDBox>
-            </Card>
-          </Grid>
-          <Grid item xs={12} lg={8}>
-            <Card>
-              <MDBox p={2} marginTop="12px" marginBottom="12px">
-                <MDTypography variant="h5" marginBottom="15px">
-                  Link Alamat Produk
-                </MDTypography>
-                <MDInput type="url" label="URL" sx={{ width: "240px" }} inputRef={inputLink} />
-              </MDBox>
-            </Card>
-          </Grid>
-        </Grid>
+        {viewCreate && (
+          <>
+            <Grid container spacing={3} justifyContent="center">
+              <Grid item xs={12} lg={8}>
+                <Card>
+                  <MDBox p={2} marginTop="12px" marginBottom="12px">
+                    <MDTypography variant="h5" marginBottom="15px">
+                      Judul Produk
+                    </MDTypography>
+                    <MDInput
+                      type="text"
+                      label="Judul"
+                      sx={{ width: "240px" }}
+                      inputRef={inputJudul}
+                    />
+                  </MDBox>
+                </Card>
+              </Grid>
+              <Grid item xs={12} lg={8}>
+                <Card>
+                  <MDBox p={2} marginTop="12px" marginBottom="12px">
+                    <MDTypography variant="h5" marginBottom="15px">
+                      Link Alamat Produk
+                    </MDTypography>
+                    <MDInput type="url" label="URL" sx={{ width: "240px" }} inputRef={inputLink} />
+                  </MDBox>
+                </Card>
+              </Grid>
+            </Grid>
+            <MDButton
+              variant="gradient"
+              color="dark"
+              sx={{ marginTop: "25px", width: "45%" }}
+              onClick={dataPost}
+            >
+              <Icon sx={{ fontWeight: "bold" }}>add</Icon>
+              &nbsp;Tambah Produk Baru
+            </MDButton>
+          </>
+        )}
         <MDButton
           variant="gradient"
           color="dark"
-          sx={{ marginTop: "25px", width: "45%" }}
-          onClick={dataPost}
+          sx={{ marginTop: "15px", width: "45%" }}
+          onClick={() => setCreate((c) => !c)}
         >
-          <Icon sx={{ fontWeight: "bold" }}>add</Icon>
-          &nbsp;Tambah Produk Baru
+          <Icon>{viewCreate ? "back" : "add"}</Icon>
+          {viewCreate ? "Back" : "Create"}
         </MDButton>
         <MDButton
           variant="gradient"
@@ -210,18 +249,22 @@ function Notifications() {
           <Icon sx={{ fontWeight: "bold" }}>view</Icon>
           {isShowed ? "Hide Data" : "Show Data"}
         </MDButton>
-        <Grid mt={6} xs={12} item sx={{maxWidth: '100vw'}}>
+        <Grid mt={6} xs={12} item sx={{ maxWidth: "100vw" }}>
           {isShowed && (
             <DataTable
-              maxWidth={'100vw'}
+              maxWidth={"100vw"}
               table={{
                 columns: [
                   { Header: "Id", accessor: "id", width: "25%" },
                   { Header: "Judul Produk", accessor: "judul_produk", width: "30%" },
                   { Header: "Link Produk", accessor: "link_produk" },
-                  { Header: "action", align: "center", accessor: (origRow, rowIndex) => {return (
-                    <MDButton onClick={() => deleteHandler(origRow)}>Delete</MDButton>
-                  )} },
+                  {
+                    Header: "action",
+                    align: "center",
+                    accessor: (origRow, rowIndex) => {
+                      return <MDButton onClick={() => deleteHandler(origRow)}>Delete</MDButton>;
+                    },
+                  },
                 ],
                 rows: dataProduk,
               }}

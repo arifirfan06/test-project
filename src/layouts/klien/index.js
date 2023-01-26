@@ -12,7 +12,7 @@ Coded by www.creative-tim.com
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -40,10 +40,11 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import { useContext } from "react";
 import { AuthContext } from "context/Auth";
 import { useNavigate } from "react-router-dom";
+import DataTable from "examples/Tables/DataTable";
 
 // import Footer from "examples/Footer";
 // import DataTable from "examples/Tables/DataTable";
-
+import axios from "axios";
 // Data
 // import authorsTableData from "layouts/tables/data/authorsTableData";
 // import projectsTableData from "layouts/tables/data/projectsTableData";
@@ -55,14 +56,45 @@ function Tables() {
   const { isLogin } = useContext(AuthContext);
   const navigate = useNavigate()
   {!isLogin && navigate('/authentication/sign-in')}
+
+  useEffect( () => {
+     dataFetch()
+  }, [])
+
+  const [dataKlien, setData] = useState([]);
+  const [isShowed, setView] = useState(true);
+  const [viewCreate, setCreate] = useState(false);
   const handleChange = (event) => {
     setAge(event.target.value);
   };
 
+  const dataFetch = async () => {
+    const data = await axios('https://a25muet3l2.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_project', 
+    {headers: {auth : localStorage.getItem('auth')}})
+    // console.log(data)
+    setData(data.data.data)
+  }
+  const dataRefetch = () => {
+    setView(c => !c)
+    dataFetch()
+  }
+  const deleteHandler = async (row) => {
+    console.log(row);
+    await axios
+      .delete(
+        `https://a25muet3l2.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_project?id=${row.id}`,
+        {
+          headers: { auth: localStorage.getItem("auth") },
+        }
+      )
+      .then((res) => console.log(res));
+      dataFetch()
+    }
+  // console.log(dataKlien)
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <MDBox pt={6} pb={3}>
+      {viewCreate && <MDBox pt={6} pb={3}>
         <Grid container spacing={6}>
           <Grid item xs={12}>
             <Card>
@@ -107,40 +139,6 @@ function Tables() {
                     Project type :
                   </MDTypography>
                   <MDInput type="text" label="Project Type" sx={{ width: "200px" }} size="small"/>
-                  {/* <Grid container>
-                    <MDButton variant="contained" color="info" sx={{ margin: "5px" }}>
-                      ERP
-                    </MDButton>
-                    <MDButton variant="contained" color="info" sx={{ margin: "5px" }}>
-                      Application
-                    </MDButton>
-                    <MDButton variant="contained" color="info" sx={{ margin: "5px" }}>
-                      Fellowship
-                    </MDButton>
-                    <MDButton variant="contained" color="info" sx={{ margin: "5px" }}>
-                      Lain-lain
-                    </MDButton>
-                  </Grid> */}
-                  {/* <FormControl sx={{ m: 1, mx:0, my:0, minWidth: 160, height: "40px", width: '200px' }}>
-                    <InputLabel id="demo-simple-select-autowidth-label">Pilih Kategori</InputLabel>
-                    <Select
-                      labelId="demo-simple-select-autowidth-label"
-                      id="demo-simple-select-autowidth"
-                      value={age}
-                      onChange={handleChange}
-                      autoWidth
-                      label="Pilih Kategori"
-                      sx={{ height: "42px" }}
-                    >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
-                      <MenuItem value="Training">ERP</MenuItem>
-                      <MenuItem value="Vacation">Application</MenuItem>
-                      <MenuItem value="Fellowship">Travel</MenuItem>
-                      <MenuItem value="Lain-lain">Lain-lain</MenuItem>
-                    </Select>
-                  </FormControl> */}
                   <MDTypography variant="h6" fontWeight="medium" margin="12px">
                     Deskripsi :
                   </MDTypography>
@@ -166,6 +164,52 @@ function Tables() {
               </MDBox>
             </Card>
           </Grid>
+        </Grid>
+      </MDBox>}
+      <MDBox sx={{textAlign: 'center'}}>
+      <MDButton
+          variant="gradient"
+          color="dark"
+          sx={{ marginTop: "15px", width: "45%"}}
+          onClick={() => setCreate(c => !c)}
+        >
+          <Icon>{viewCreate ? "back" : "add"}</Icon> 
+          {viewCreate ? "Back" : "Create"}
+        </MDButton>
+      </MDBox>
+      <MDBox sx={{textAlign: 'center'}}>
+        <MDButton
+          variant="gradient"
+          color="dark"
+          sx={{ marginTop: "15px", width: "45%"}}
+          onClick={dataRefetch}
+        >
+          <Icon>refresh</Icon> 
+          {isShowed ? "Hide Data" : "Show Data"}
+        </MDButton>
+          <Grid mt={6} xs={12} item sx={{maxWidth: '100vw', textAlign: 'center'}}>
+          {isShowed && (
+            <DataTable
+              maxWidth={'100vw'}
+              table={{
+                columns: [
+                  { Header: "Id", accessor: "id", width: "5%" },
+                  { Header: "Logo Klien", accessor: "logo_klien", width: "20%" },
+                  { Header: "Nama Project Manager", accessor: "nama_project_manager", width: "15%" },
+                  { Header: "Project Date", accessor: "project_date", width: "10%" },
+                  { Header: "Project Type", accessor: "project_type", width: "10%" },
+                  { Header: "Content Project", accessor: "content_project", width: "30%" },
+                  { Header: "Gambar", align: "center", accessor: (origRow, rowIndex) => {return (
+                    <MDButton onClick={() => viewHandler(origRow)}>View</MDButton>
+                  )} },
+                  { Header: "action", align: "center", accessor: (origRow, rowIndex) => {return (
+                    <MDButton onClick={() => deleteHandler(origRow)}>Delete</MDButton>
+                  )} },
+                ],
+                rows: dataKlien,
+              }}
+            />
+          )}
         </Grid>
       </MDBox>
       {/* <Footer /> */}

@@ -12,7 +12,7 @@ Coded by www.creative-tim.com
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
-import React from "react";
+import React, { useState, useEffect } from "react";
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -29,6 +29,7 @@ import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import Stack from "@mui/material/Stack";
 import MDButton from "components/MDButton";
 import MDInput from "components/MDInput";
+import DataTable from "examples/Tables/DataTable";
 
 // Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
@@ -36,9 +37,11 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import { useContext } from "react";
 import { AuthContext } from "context/Auth";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 // import Footer from "examples/Footer";
 // import DataTable from "examples/Tables/DataTable";
+import Editor from '../../examples/Custom Editor/index'
 
 // Data
 // import authorsTableData from "layouts/tables/data/authorsTableData";
@@ -50,10 +53,41 @@ function Tables() {
   const { isLogin } = useContext(AuthContext);
   const navigate = useNavigate()
   {!isLogin && navigate('/authentication/sign-in')}
+  const [dataBlog, setData] = useState([]);
+  const [isShowed, setView] = useState(true);
+  const [viewCreate, setCreate] = useState(false);
+
+  useEffect(() => {
+    dataFetch()
+  }, [])
+
+  const dataFetch = async () => {
+    const data = await axios('https://a25muet3l2.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_blog',{
+      headers: {auth: localStorage.getItem('auth')}
+    } )
+    setData(data.data.data)
+  }
+  const dataRefetch = () => {
+    setView(c => !c)
+    dataFetch()
+  }
+
+  const deleteHandler = async (row) => {
+    console.log(row);
+    await axios
+      .delete(
+        `https://a25muet3l2.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_blog?id=${row.id}`,
+        {
+          headers: { auth: localStorage.getItem("auth") },
+        }
+      )
+      .then((res) => console.log(res));
+      dataFetch()
+    }
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <MDBox pt={6} pb={3}>
+      {viewCreate && <MDBox pt={6} pb={3}>
         <Grid container spacing={6}>
           <Grid item xs={12}>
             <Card>
@@ -92,7 +126,7 @@ function Tables() {
                   <MDTypography variant="h6" fontWeight="medium" margin="12px">
                     Deskripsi :
                   </MDTypography>
-                  <MDInput
+                  {/* <MDInput
                     label="Type here..."
                     multiline
                     rows={6}
@@ -100,7 +134,8 @@ function Tables() {
                       width: '500px',
                       maxWidth: '95%'
                     }}
-                  />
+                  /> */}
+                  <Editor></Editor>
                   <MDButton variant="gradient" color="dark" sx={{ marginTop: "30px" }}>
                     <Icon sx={{ fontWeight: "bold" }}>add</Icon>
                     &nbsp;Tambah Artikel Baru
@@ -109,6 +144,50 @@ function Tables() {
               </MDBox>
             </Card>
           </Grid>
+        </Grid>
+      </MDBox>}
+      <MDBox sx={{textAlign: 'center'}}>
+      <MDButton
+          variant="gradient"
+          color="dark"
+          sx={{ marginTop: "15px", width: "45%"}}
+          onClick={() => setCreate(c => !c)}
+        >
+          <Icon>{viewCreate ? "back" : "add"}</Icon> 
+          {viewCreate ? "Back" : "Create"}
+        </MDButton>
+      </MDBox>
+      <MDBox sx={{textAlign: 'center'}}>
+        <MDButton
+          variant="gradient"
+          color="dark"
+          sx={{ marginTop: "15px", width: "45%"}}
+          onClick={dataRefetch}
+        >
+          <Icon>refresh</Icon> 
+          {isShowed ? "Hide Data" : "Show Data"}
+        </MDButton>
+          <Grid mt={6} xs={12} item sx={{maxWidth: '100vw', textAlign: 'center'}}>
+          {isShowed && (
+            <DataTable
+              maxWidth={'100vw'}
+              table={{
+                columns: [
+                  { Header: "Id", accessor: "id", width: "5%" },
+                  { Header: "Judul", accessor: "judul", width: "10%" },
+                  { Header: "Gambar", accessor: "gambar", width: "20%" },
+                  { Header: "Deskripsi", accessor: "content", width: "30%" },
+                  { Header: "Gambar", align: "center", accessor: (origRow, rowIndex) => {return (
+                    <MDButton onClick={() => viewHandler(origRow)}>View</MDButton>
+                  )} },
+                  { Header: "action", align: "center", accessor: (origRow, rowIndex) => {return (
+                    <MDButton onClick={() => deleteHandler(origRow)}>Delete</MDButton>
+                  )} },
+                ],
+                rows: dataBlog,
+              }}
+            />
+          )}
         </Grid>
       </MDBox>
       {/* <Footer /> */}

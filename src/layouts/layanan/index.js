@@ -12,7 +12,7 @@ Coded by www.creative-tim.com
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
-import React from "react";
+import React, { useEffect } from "react";
 import axios from 'axios'
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -53,8 +53,18 @@ function Tables() {
   const { isLogin } = useContext(AuthContext);
   const navigate = useNavigate()
   {!isLogin && navigate('/authentication/sign-in')}
-  const [isShowed, setView] = useState(false);
+  const [isShowed, setView] = useState(true);
   const [dataLayanan, setData] = useState([]);
+  const [viewCreate, setCreate] = useState(false);
+
+  useEffect( async () => {
+    const data = await axios('https://a25muet3l2.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_layanan',
+    {
+      headers: {auth: localStorage.getItem('auth')}
+    })
+    setData(data.data.data)
+  }, [])
+
   const dataFetch = async () => {
     setView((current) => !current);
     await axios
@@ -70,7 +80,7 @@ function Tables() {
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <MDBox pt={6} pb={3}>
+      {viewCreate &&  <MDBox pt={6} pb={3}>
         <Grid container spacing={6}>
           <Grid item xs={12}>
             <Card>
@@ -115,7 +125,6 @@ function Tables() {
                       maxWidth: '95%'
                     }}
                   />
-
                   <MDButton variant="gradient" color="dark" sx={{ margin: "15px" }}>
                     <Icon sx={{ fontWeight: "bold" }}>add</Icon>
                     &nbsp;Tambah Layanan Baru
@@ -125,7 +134,18 @@ function Tables() {
             </Card>
           </Grid>
         </Grid>
-      </MDBox>
+      </MDBox>}
+      <MDBox sx={{textAlign: 'center'}}>
+      <MDButton
+          variant="gradient"
+          color="dark"
+          sx={{ marginTop: "15px", width: "45%"}}
+          onClick={() => setCreate(c => !c)}
+        >
+          <Icon>{viewCreate ? "back" : "add"}</Icon> 
+          {viewCreate ? "Back" : "Create"}
+        </MDButton>
+        </MDBox>
       <MDBox sx={{textAlign: 'center'}}>
       <MDButton
           variant="gradient"

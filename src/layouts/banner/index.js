@@ -36,7 +36,9 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import { useContext } from "react";
 import { AuthContext } from "context/Auth";
 import { useNavigate } from "react-router-dom";
-
+import axios from "axios";
+import React,{useState, useEffect} from "react";
+import DataTable from "examples/Tables/DataTable";
 // import Footer from "examples/Footer";
 // import DataTable from "examples/Tables/DataTable";
 
@@ -50,10 +52,43 @@ function Banner() {
   const { isLogin } = useContext(AuthContext);
   const navigate = useNavigate()
   {!isLogin && navigate('/authentication/sign-in')}
+
+  const [dataBanner, setData] = useState([]);
+  const [isShowed, setView] = useState(true);
+  const [viewCreate, setCreate] = useState(false);
+
+  useEffect(() => {
+    dataFetch()
+  }, [])
+
+  const dataFetch = async () => {
+    const data = await axios('https://a25muet3l2.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_banner', {
+      headers: {auth: localStorage.getItem('auth')}
+    })
+    setData(data.data.data)
+  }
+
+  const dataRefetch = () => {
+    setView(c => !c)
+    dataFetch()
+  }
+
+  const deleteHandler = async (row) => {
+    console.log(row);
+    await axios
+      .delete(
+        `https://a25muet3l2.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_banner?id=${row.id}`,
+        {
+          headers: { auth: localStorage.getItem("auth") },
+        }
+      )
+      .then((res) => console.log(res));
+      dataFetch()
+    }
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <MDBox pt={6} pb={3}>
+      {viewCreate && <MDBox pt={6} pb={3}>
         <Grid container spacing={6}>
           <Grid item xs={12}>
             <Card>
@@ -85,20 +120,6 @@ function Banner() {
                     Upload
                     <input hidden accept="image/*" multiple type="file" />
                   </MDButton>
-                  {/* <MDTypography variant="h6" fontWeight="medium" margin="12px">
-                    Deskripsi :
-                  </MDTypography>
-
-                  <MDInput
-                    label="Type here..."
-                    multiline
-                    rows={5}
-                    sx={{
-                      width: '400px',
-                      maxWidth: '95%'
-                    }}
-                  /> */}
-
                   <MDButton variant="gradient" color="dark" sx={{ marginTop: "35px" }}>
                     <Icon sx={{ fontWeight: "bold" }}>add</Icon>
                     &nbsp;Tambah Banner
@@ -108,6 +129,49 @@ function Banner() {
               </MDBox>
             </Card>
           </Grid>
+        </Grid>
+      </MDBox>}
+      <MDBox sx={{textAlign: 'center'}}>
+      <MDButton
+          variant="gradient"
+          color="dark"
+          sx={{ marginTop: "15px", width: "45%"}}
+          onClick={() => setCreate(c => !c)}
+        >
+          <Icon>{viewCreate ? "back" : "add"}</Icon> 
+          {viewCreate ? "Back" : "Create"}
+        </MDButton>
+      </MDBox>
+      <MDBox sx={{textAlign: 'center'}}>
+        <MDButton
+          variant="gradient"
+          color="dark"
+          sx={{ marginTop: "15px", width: "45%"}}
+          onClick={dataRefetch}
+        >
+          <Icon>refresh</Icon> 
+          {isShowed ? "Hide Data" : "Show Data"}
+        </MDButton>
+          <Grid mt={6} xs={12} item sx={{maxWidth: '100vw', textAlign: 'center'}}>
+          {isShowed && (
+            <DataTable
+              maxWidth={'100vw'}
+              table={{
+                columns: [
+                  { Header: "Id", accessor: "id", width: "5%" },
+                  { Header: "Banner", accessor: "banner", width: "10%" },
+                  { Header: "Status", accessor: "status", width: "20%" },
+                  { Header: "Gambar", align: "center", accessor: (origRow, rowIndex) => {return (
+                    <MDButton onClick={() => viewHandler(origRow)}>View</MDButton>
+                  )} },
+                  { Header: "action", align: "center", accessor: (origRow, rowIndex) => {return (
+                    <MDButton onClick={() => deleteHandler(origRow)}>Delete</MDButton>
+                  )} },
+                ],
+                rows: dataBanner,
+              }}
+            />
+          )}
         </Grid>
       </MDBox>
       {/* <Footer /> */}
