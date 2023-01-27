@@ -99,9 +99,9 @@ function Tables() {
   const [gambar, setImage] = useState([]);
   const imagePut = async () => {
     const formData = new FormData();
-    formData.append("files", gambar);
-    const data = axios.put(
-      `https://a25muet3l2.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_galeri?id=${gambar[0].name}`,
+    formData.append("gambar", gambar);
+    const data = await axios.put(
+      `https://7vv6wlcft7.execute-api.ap-southeast-1.amazonaws.com/default/file-webadmintem/${gambar[0].name}`,
       formData,
       {
         headers: {
@@ -110,10 +110,11 @@ function Tables() {
         },
       }
     );
+    console.log(data)
   };
 
   const dataPost = async () => {
-    const data = axios.post(
+    const data = await axios.post(
       "https://a25muet3l2.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_galeri",
       {
         headers: { auth: localStorage.getItem("auth") },
@@ -144,7 +145,10 @@ function Tables() {
       )
       .then((res) => setData(res.data.data));
   };
-  const viewHandler = async () => {};
+  const viewHandler = (orig) => {
+    console.log(orig)
+    window.open(orig.gambar, '_blank')
+  };
   console.log(gambar);
   return (
     <DashboardLayout>

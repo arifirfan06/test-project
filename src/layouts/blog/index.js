@@ -135,7 +135,9 @@ function Tables() {
                       maxWidth: '95%'
                     }}
                   /> */}
-                  <Editor></Editor>
+                  <div style={{maxWidth: '100%', maxHeight: '100%'}}>
+                  <Editor style={{height: "400px"}}></Editor>
+                  </div>
                   <MDButton variant="gradient" color="dark" sx={{ marginTop: "30px" }}>
                     <Icon sx={{ fontWeight: "bold" }}>add</Icon>
                     &nbsp;Tambah Artikel Baru
