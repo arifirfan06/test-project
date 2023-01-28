@@ -107,6 +107,7 @@ function Tables() {
         headers: {
           auth: localStorage.getItem("auth"),
           "content-type": "image/png",
+          'Access-Control-Allow-Origin': '*'
         },
       }
     );
@@ -197,7 +198,7 @@ function Tables() {
                       />
                     </MDButton>
                     {/* perlu loop */}
-                    <h3>{JSON.stringify(gambar)}</h3>
+                    <h3>{gambar.length > 0 && gambar[0].name}</h3>
                     <MDTypography variant="h6" fontWeight="medium" margin="12px">
                       Kategori :
                     </MDTypography>
