@@ -187,6 +187,7 @@ function Notifications() {
       .then((res) => setData(res.data.data));
     setView((current) => !current);
   };
+  
   return (
     <DashboardLayout>
       <DashboardNavbar />

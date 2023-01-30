@@ -85,6 +85,12 @@ function Banner() {
       .then((res) => console.log(res));
       dataFetch()
     }
+
+    const viewHandler = (orig) => {
+      console.log(orig)
+      window.open(orig.banner, '_blank')
+    };
+
   return (
     <DashboardLayout>
       <DashboardNavbar />

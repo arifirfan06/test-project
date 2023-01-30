@@ -90,6 +90,11 @@ function Tables() {
       .then((res) => console.log(res));
       dataFetch()
     }
+
+    const viewHandler = (orig) => {
+      console.log(orig)
+      window.open(orig.logo_klien, '_blank')
+    };
   // console.log(dataKlien)
   return (
     <DashboardLayout>

@@ -77,6 +77,10 @@ function Tables() {
       .then((res) => setData(res.data.data));
   }
 
+  const viewHandler = (orig) => {
+    console.log(orig)
+    window.open(orig.icon_layanan, '_blank')
+  };
   return (
     <DashboardLayout>
       <DashboardNavbar />

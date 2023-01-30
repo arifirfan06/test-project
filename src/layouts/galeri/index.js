@@ -92,10 +92,10 @@ function Tables() {
       )
       .then((res) => console.log(res));
   };
-  const [dataSend, setSend] = useState({
-    gambar: [],
-    kategory: null,
-  });
+  // const [dataSend, setSend] = useState({
+  //   gambar: [],
+  //   kategory: null,
+  // });
   const [gambar, setImage] = useState([]);
   const imagePut = async () => {
     const formData = new FormData();
@@ -107,7 +107,7 @@ function Tables() {
         headers: {
           auth: localStorage.getItem("auth"),
           "content-type": "image/png",
-          'Access-Control-Allow-Origin': '*'
+          // 'Access-Control-Allow-Origin': '*'
         },
       }
     );
