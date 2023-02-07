@@ -65,7 +65,7 @@ function Tables() {
   const [isShowed, setView] = useState(true);
   const [dataGaleri, setData] = useState([]);
   const [viewCreate, setCreate] = useState(false);
-
+  const [selected, setSelected] = useState(null)
   useEffect(async () => {
     await axios
       .get(
@@ -77,9 +77,9 @@ function Tables() {
       .then((res) => setData(res.data.data));
   }, []);
 
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
+  // const handleChange = (event) => {
+  //   setAge(event.target.value);
+  // };
 
   const deleteHandler = async (row) => {
     console.log(row);
@@ -101,7 +101,7 @@ function Tables() {
     const formData = new FormData();
     formData.append("gambar", gambar);
     const data = await axios.put(
-      `https://7vv6wlcft7.execute-api.ap-southeast-1.amazonaws.com/default/file-webadmintem/${gambar[0].name}`,
+      // `https://7vv6wlcft7.execute-api.ap-southeast-1.amazonaws.com/default/file-webadmintem/${gambar[0].name}`,
       formData,
       {
         headers: {
@@ -113,15 +113,20 @@ function Tables() {
     );
     console.log(data)
   };
-
+  console.log(selected)
   const dataPost = async () => {
     const data = await axios.post(
       "https://a25muet3l2.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_galeri",
       {
+        body: {
+          "gambar": "gambar222.jpg",
+          "kategory": 1      
+        },
+      },{
         headers: { auth: localStorage.getItem("auth") },
-        body: {},
       }
     );
+    console.log(data)
   };
 
   // const dataRefetch = async () => {
@@ -200,24 +205,24 @@ function Tables() {
                     {/* perlu loop */}
                     <h3>{gambar.length > 0 && gambar[0].name}</h3>
                     <MDTypography variant="h6" fontWeight="medium" margin="12px">
-                      Kategori :
+                      Kategori : {selected == 1 ? 'Training' : selected == 2 ? 'Vacation' : selected == 3 ? 'Fellowship' : selected == 4 ? 'Lain-lain' : ''}
                     </MDTypography>
                     <Grid container>
-                      <MDButton variant="contained" color="info" sx={{ margin: "5px" }}>
+                      <MDButton variant="contained" color="info" sx={{ margin: "5px" }} onClick={() => setSelected(1)}>
                         Training
                       </MDButton>
-                      <MDButton variant="contained" color="info" sx={{ margin: "5px" }}>
+                      <MDButton variant="contained" color="info" sx={{ margin: "5px" }} onClick={() => setSelected(2)}>
                         Vacation
                       </MDButton>
-                      <MDButton variant="contained" color="info" sx={{ margin: "5px" }}>
+                      <MDButton variant="contained" color="info" sx={{ margin: "5px" }} onClick={() => setSelected(3)}>
                         Fellowship
                       </MDButton>
-                      <MDButton variant="contained" color="info" sx={{ margin: "5px" }}>
+                      <MDButton variant="contained" color="info" sx={{ margin: "5px" }} onClick={() => setSelected(4)}>
                         Lain-lain
                       </MDButton>
                     </Grid>
                     <MDButton
-                      onClick={imagePut}
+                      onClick={dataPost}
                       variant="gradient"
                       color="dark"
                       sx={{ marginTop: "30px", width: "200px", alignItems: "center" }}
@@ -257,12 +262,13 @@ function Tables() {
         <Grid mt={6} xs={12} item sx={{ maxWidth: "100vw", textAlign: "center" }}>
           {isShowed && (
             <DataTable
+              
               maxWidth={"100vw"}
               table={{
                 columns: [
                   { Header: "Id", accessor: "id", width: "25%" },
                   { Header: "Kategori", accessor: "kategory", width: "20%" },
-                  { Header: "Link", accessor: "gambar", width: "30%" },
+                  // { Header: "Link", accessor: "gambar", width: "30%" },
                   {
                     Header: "Gambar",
                     align: "center",

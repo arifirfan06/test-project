@@ -250,15 +250,22 @@ function Notifications() {
           <Icon sx={{ fontWeight: "bold" }}>view</Icon>
           {isShowed ? "Hide Data" : "Show Data"}
         </MDButton>
-        <Grid mt={6} xs={12} item sx={{ maxWidth: "100vw" }}>
+        <Grid mt={6} xs={12} item sx={{ maxWidth: "100vw", textAlign: 'center' }}>
           {isShowed && (
             <DataTable
               maxWidth={"100vw"}
               table={{
                 columns: [
-                  { Header: "Id", accessor: "id", width: "25%" },
+                  // { Header: "Id", accessor: "id", width: "25%" },
                   { Header: "Judul Produk", accessor: "judul_produk", width: "30%" },
                   { Header: "Link Produk", accessor: "link_produk" },
+                  {
+                    Header: "Link Produk",
+                    align: "center",
+                    accessor: (origRow, rowIndex) => {
+                      return <MDButton onClick={() => {window.open(origRow.link_produk)}}>View</MDButton>;
+                    },
+                  },
                   {
                     Header: "action",
                     align: "center",
