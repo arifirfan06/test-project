@@ -12,7 +12,7 @@ Coded by www.creative-tim.com
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import axios from 'axios'
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -56,6 +56,7 @@ function Tables() {
   const [isShowed, setView] = useState(true);
   const [dataLayanan, setData] = useState([]);
   const [viewCreate, setCreate] = useState(false);
+  const deskripsi = useRef()
 
   useEffect( async () => {
     const data = await axios('https://a25muet3l2.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_layanan',
@@ -117,19 +118,24 @@ function Tables() {
                     <input hidden accept="image/*" multiple type="file" />
                   </MDButton>
                   <MDTypography variant="h6" fontWeight="medium" margin="12px">
+                    Judul Layanan :
+                  </MDTypography>
+                  <MDInput type="text" label="Nama" sx={{ width: "240px" }} size="small"/>
+                  <MDTypography variant="h6" fontWeight="medium" margin="12px">
                     Deskripsi :
                   </MDTypography>
 
                   <MDInput
                     label="Type here..."
                     multiline
+                    inputRef={deskripsi}
                     rows={5}
                     sx={{
                       width: '400px',
                       maxWidth: '95%'
                     }}
                   />
-                  <MDButton variant="gradient" color="dark" sx={{ margin: "15px" }}>
+                  <MDButton variant="gradient" color="dark" sx={{ margin: "15px" }} onClick={() => {console.log(deskripsi.current.value)}}>
                     <Icon sx={{ fontWeight: "bold" }}>add</Icon>
                     &nbsp;Tambah Layanan Baru
                   </MDButton>

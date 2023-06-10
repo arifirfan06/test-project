@@ -58,14 +58,15 @@ function Tables() {
   const [age, setAge] = useState("");
   const { isLogin } = useContext(AuthContext);
   const navigate = useNavigate();
-  {
-    !isLogin && navigate("/authentication/sign-in");
-  }
+  // {
+  //   !isLogin && navigate("/authentication/sign-in");
+  // }
 
   const [isShowed, setView] = useState(true);
   const [dataGaleri, setData] = useState([]);
   const [viewCreate, setCreate] = useState(false);
-  const [selected, setSelected] = useState(null)
+  const [selected, setSelected] = useState(null);
+  const [message, setMessage] = useState([]);
   useEffect(async () => {
     await axios
       .get(
@@ -81,6 +82,17 @@ function Tables() {
   //   setAge(event.target.value);
   // };
 
+  const dataRefetch = async () => {
+    await axios
+      .get(
+        "https://a25muet3l2.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_galeri",
+        {
+          headers: { auth: localStorage.getItem('auth') },
+        }
+      )
+      .then((res) => setData(res.data.data));
+  }
+
   const deleteHandler = async (row) => {
     console.log(row);
     await axios
@@ -90,55 +102,74 @@ function Tables() {
           headers: { auth: localStorage.getItem("auth") },
         }
       )
-      .then((res) => console.log(res));
+      dataRefetch()
   };
   // const [dataSend, setSend] = useState({
   //   gambar: [],
   //   kategory: null,
   // });
-  const [gambar, setImage] = useState([]);
-  const imagePut = async () => {
-    const formData = new FormData();
-    formData.append("gambar", gambar);
-    const data = await axios.put(
-      // `https://7vv6wlcft7.execute-api.ap-southeast-1.amazonaws.com/default/file-webadmintem/${gambar[0].name}`,
-      formData,
-      {
-        headers: {
-          auth: localStorage.getItem("auth"),
-          "content-type": "image/png",
-          // 'Access-Control-Allow-Origin': '*'
-        },
-      }
-    );
-    console.log(data)
+  const [gambar, setImage] = useState(null);
+  // const imagePut = async () => {
+  //   const formData = new FormData();
+  //   formData.append("gambar", gambar);
+  //   try {
+  //     const data = await axios.put(
+
+  //       `https://sw0fiftl4l.execute-api.ap-southeast-1.amazonaws.com/default/file-webadmintem/${gambar[0].name}`,
+  //       formData,
+  //     );
+  //     console.log(data);
+  //     setMessage(JSON.stringify(data));
+  //   } catch (error) {
+  //     console.log(error);
+  //     setMessage(JSON.stringify(error));
+  //   }
+  // };
+  const uploadHandlerAws = (e) => {
+    const file = e.target.files[0];
+    console.log(file);
+    setImage(file);
   };
-  console.log(selected)
+
+  var requestOptions = {
+    method: "PUT",
+    headers: {
+      "Content-Type": "image/png",
+      "x-cors-api-key": "temp_fa772485fae344a595459513bf4c0340",
+    },
+    body: gambar,
+    redirect: "follow",
+  };
+
+  async function awsSubmitHandler() {
+    try {
+      const response = await fetch(
+        `https://proxy.cors.sh/https://sw0fiftl4l.execute-api.ap-southeast-1.amazonaws.com/default/file-webadmintem/${gambar.name}`,
+        requestOptions
+      );
+      const result = await response.text();
+      console.log(result);
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
+
+  // console.log(selected);
   const dataPost = async () => {
+    await awsSubmitHandler();
     const data = await axios.post(
       "https://a25muet3l2.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_galeri",
       {
-        body: {
-          "gambar": "gambar222.jpg",
-          "kategory": 1      
-        },
-      },{
+        gambar: gambar.name,
+        kategory: selected,
+      },
+      {
         headers: { auth: localStorage.getItem("auth") },
       }
     );
-    console.log(data)
+    console.log(data);
+    dataRefetch()
   };
-
-  // const dataRefetch = async () => {
-  //   await axios
-  //     .get(
-  //       "https://a25muet3l2.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_galeri",
-  //       {
-  //         headers: { auth: localStorage.getItem('auth') },
-  //       }
-  //     )
-  //     .then((res) => setData(res.data.data));
-  // }
 
   const dataFetch = async () => {
     setView((current) => !current);
@@ -152,10 +183,10 @@ function Tables() {
       .then((res) => setData(res.data.data));
   };
   const viewHandler = (orig) => {
-    console.log(orig)
-    window.open(orig.gambar, '_blank')
+    console.log(orig);
+    window.open(orig.gambar, "_blank");
   };
-  console.log(gambar);
+  // console.log(gambar);
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -179,6 +210,7 @@ function Tables() {
                   </MDTypography>
                 </MDBox>
                 <MDBox pt={3} mx={2}>
+                  <h4>{message}</h4>
                   <Stack direction="row" alignItems="" flexDirection="column" mb="20px">
                     <MDTypography variant="h6" fontWeight="medium" margin="12px">
                       Unggah foto :
@@ -196,28 +228,54 @@ function Tables() {
                         accept="image/*"
                         multiple
                         type="file"
-                        onChange={(e) => {
-                          setImage(e.target.files);
-                          console.log(e.target.files);
-                        }}
+                        onChange={uploadHandlerAws}
                       />
                     </MDButton>
                     {/* perlu loop */}
-                    <h3>{gambar.length > 0 && gambar[0].name}</h3>
+                    <h3>{gambar && gambar.name}</h3>
                     <MDTypography variant="h6" fontWeight="medium" margin="12px">
-                      Kategori : {selected == 1 ? 'Training' : selected == 2 ? 'Vacation' : selected == 3 ? 'Fellowship' : selected == 4 ? 'Lain-lain' : ''}
+                      Kategori :{" "}
+                      {selected == 1
+                        ? "Training"
+                        : selected == 2
+                        ? "Vacation"
+                        : selected == 3
+                        ? "Fellowship"
+                        : selected == 4
+                        ? "Lain-lain"
+                        : ""}
                     </MDTypography>
                     <Grid container>
-                      <MDButton variant="contained" color="info" sx={{ margin: "5px" }} onClick={() => setSelected(1)}>
+                      <MDButton
+                        variant="contained"
+                        color="info"
+                        sx={{ margin: "5px" }}
+                        onClick={() => setSelected(1)}
+                      >
                         Training
                       </MDButton>
-                      <MDButton variant="contained" color="info" sx={{ margin: "5px" }} onClick={() => setSelected(2)}>
+                      <MDButton
+                        variant="contained"
+                        color="info"
+                        sx={{ margin: "5px" }}
+                        onClick={() => setSelected(2)}
+                      >
                         Vacation
                       </MDButton>
-                      <MDButton variant="contained" color="info" sx={{ margin: "5px" }} onClick={() => setSelected(3)}>
+                      <MDButton
+                        variant="contained"
+                        color="info"
+                        sx={{ margin: "5px" }}
+                        onClick={() => setSelected(3)}
+                      >
                         Fellowship
                       </MDButton>
-                      <MDButton variant="contained" color="info" sx={{ margin: "5px" }} onClick={() => setSelected(4)}>
+                      <MDButton
+                        variant="contained"
+                        color="info"
+                        sx={{ margin: "5px" }}
+                        onClick={() => setSelected(4)}
+                      >
                         Lain-lain
                       </MDButton>
                     </Grid>
@@ -262,7 +320,6 @@ function Tables() {
         <Grid mt={6} xs={12} item sx={{ maxWidth: "100vw", textAlign: "center" }}>
           {isShowed && (
             <DataTable
-              
               maxWidth={"100vw"}
               table={{
                 columns: [

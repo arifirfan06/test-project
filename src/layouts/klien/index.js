@@ -12,7 +12,7 @@ Coded by www.creative-tim.com
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -64,9 +64,10 @@ function Tables() {
   const [dataKlien, setData] = useState([]);
   const [isShowed, setView] = useState(true);
   const [viewCreate, setCreate] = useState(false);
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
+  const nama = useRef()
+  const date = useRef()
+  const type = useRef()
+  const deskripsi = useRef()
 
   const dataFetch = async () => {
     const data = await axios('https://a25muet3l2.execute-api.ap-southeast-1.amazonaws.com/default/adminwebtem_project', 
@@ -95,6 +96,13 @@ function Tables() {
       console.log(orig)
       window.open(orig.logo_klien, '_blank')
     };
+
+    const submitHandler = () => {
+      console.log(nama.current.value)
+      console.log(type.current.value)
+      console.log(date.current.value)
+      console.log(deskripsi.current.value)
+    }
   // console.log(dataKlien)
   return (
     <DashboardLayout>
@@ -135,21 +143,22 @@ function Tables() {
                   <MDTypography variant="h6" fontWeight="medium" margin="12px">
                     Project manager :
                   </MDTypography>
-                  <MDInput type="text" label="Nama" sx={{ width: "200px" }} size="small"/>
+                  <MDInput type="text" label="Nama" sx={{ width: "200px" }} size="small" inputRef={nama}/>
                   <MDTypography variant="h6" fontWeight="medium" margin="12px">
                     Project date :
                   </MDTypography>
-                  <MDInput type="date" sx={{ width: "200px" }} size="small"/>
+                  <MDInput type="date" sx={{ width: "200px" }} size="small" inputRef={date}/>
                   <MDTypography variant="h6" fontWeight="medium" margin="12px">
                     Project type :
                   </MDTypography>
-                  <MDInput type="text" label="Project Type" sx={{ width: "200px" }} size="small"/>
+                  <MDInput type="text" label="Project Type" sx={{ width: "200px" }} size="small" inputRef={type}/>
                   <MDTypography variant="h6" fontWeight="medium" margin="12px">
                     Deskripsi :
                   </MDTypography>
                   <MDInput
                     label="Type here..."
                     multiline
+                    inputRef={deskripsi}
                     rows={6}
                     sx={{
                       width: 500,
@@ -160,6 +169,7 @@ function Tables() {
                   <MDButton
                     variant="gradient"
                     color="dark"
+                    onClick={submitHandler}
                     sx={{ marginTop: "30px", width: "200px", alignItems: "center" }}
                   >
                     <Icon sx={{ fontWeight: "bold" }}>add</Icon>

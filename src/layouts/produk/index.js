@@ -216,7 +216,7 @@ function Notifications() {
                     <MDTypography variant="h5" marginBottom="15px">
                       Link Alamat Produk
                     </MDTypography>
-                    <MDInput type="url" label="URL" sx={{ width: "240px" }} inputRef={inputLink} />
+                    <MDInput type="url" label="URL dengan http:// atau https://" sx={{ width: "240px" }} inputRef={inputLink} />
                   </MDBox>
                 </Card>
               </Grid>
